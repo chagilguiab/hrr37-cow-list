@@ -1,12 +1,40 @@
-const http = require ('http');
+const express = require ('express');
+const app = express()
+const db = require('./db')
 
-const hostname = '127.0.0.1';
 const port = 3000;
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World!');
-});
+app.get('/', (req,res) => res.send('Hello World, Again!'))
 
-server.listen(port, hostname, () => console.log('Server listening on port: ', port));
+app.get('/api/cows', (req,res) => {
+  //TODO:
+  //respond with array of cow data from db -> e.g. [{name: 'Buttercup', description: '...'}, {name: 'Daisy', description: '...'}]
+  var queryString = 'select * from cows';
+  db.query(queryString, (err, results) => {
+    if (err) {
+      throw err;
+    } else {
+      res.send(results);
+    }
+  })
+})
+
+app.post('/api/cows', (req,res) => {
+  //TODO:
+  //take cow data from req.body and
+  var cowData = req.body;
+  console.log(cowData);
+  // const {name, description} = cowData;
+  var queryString = `insert into cows (name, text) values (${name}, ${description})`;
+  //post to data base
+  db.query(queryString, (err, result) => {
+    if (err) {
+      throw err;
+    } else {
+      res.send(req.body);
+    }
+  })
+  //respond with the data that was sent in
+})
+
+app.listen(port, () => console.log('Server listening on port: ', port));
