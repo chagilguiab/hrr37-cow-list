@@ -1,6 +1,10 @@
+//PRO-TIP: Install node modules separately between client and server
 const express = require ('express');
-const app = express()
-const db = require('./db')
+const app = express();
+const db = require('./db');
+const parser = require('body-parser');
+const jsonParser = parser.json();
+app.use(jsonParser);
 
 const port = 3000;
 
@@ -24,7 +28,7 @@ app.post('/api/cows', (req,res) => {
   //take cow data from req.body and
   var cowData = req.body;
   console.log(cowData);
-  // const {name, description} = cowData;
+  const {name, description} = cowData;
   var queryString = `insert into cows (name, text) values (${name}, ${description})`;
   //post to data base
   db.query(queryString, (err, result) => {
