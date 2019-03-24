@@ -1,18 +1,18 @@
 //PRO-TIP: Install node modules separately between client and server
 const express = require ('express');
 const app = express();
-const db = require('./db');
 const parser = require('body-parser');
 const jsonParser = parser.json();
+const db = require('./db/index.js');
 app.use(jsonParser);
 
 const port = 3000;
 
-app.get('/', (req,res) => res.send('Hello World, Again!'))
+app.get('/', (req,res) => console.log('Hello there!'));
+
+let cows = [{name: 'Buttercup', description: 'eats a lot'}];
 
 app.get('/api/cows', (req,res) => {
-  //TODO:
-  //respond with array of cow data from db -> e.g. [{name: 'Buttercup', description: '...'}, {name: 'Daisy', description: '...'}]
   var queryString = 'select * from cows';
   db.query(queryString, (err, results) => {
     if (err) {
@@ -21,24 +21,21 @@ app.get('/api/cows', (req,res) => {
       res.send(results);
     }
   })
-})
+});
 
 app.post('/api/cows', (req,res) => {
-  //TODO:
-  //take cow data from req.body and
   var cowData = req.body;
-  console.log(cowData);
-  const {name, description} = cowData;
-  var queryString = `insert into cows (name, text) values (${name}, ${description})`;
-  //post to data base
+  let name = cowData.name;
+  let description = cowData.description;
+  var queryString = `insert into cows (name, text) values ('${name}', '${description}')`;
   db.query(queryString, (err, result) => {
     if (err) {
       throw err;
     } else {
-      res.send(req.body);
+      res.send(result);
     }
   })
-  //respond with the data that was sent in
-})
+  console.log(queryString);
+});
 
 app.listen(port, () => console.log('Server listening on port: ', port));
