@@ -10,8 +10,6 @@ const port = 3000;
 
 app.get('/', (req,res) => console.log('Hello there!'));
 
-let cows = [{name: 'Buttercup', description: 'eats a lot'}];
-
 app.get('/api/cows', (req,res) => {
   var queryString = 'select * from cows';
   db.query(queryString, (err, results) => {
