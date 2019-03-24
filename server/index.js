@@ -4,7 +4,9 @@ const app = express();
 const parser = require('body-parser');
 const jsonParser = parser.json();
 const db = require('./db/index.js');
+const path = require('path');
 app.use(jsonParser);
+app.use(express.static(__dirname + '/../client/dist'));
 
 const port = 3000;
 
@@ -20,6 +22,7 @@ app.get('/api/cows', (req,res) => {
     }
   })
 });
+
 
 app.post('/api/cows', (req,res) => {
   var cowData = req.body;
